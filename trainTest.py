@@ -74,16 +74,16 @@ allContoursWithData = []                # declare empty lists,
 validContoursWithData = []              # we will fill these shortly
 
 try:
-    npaClassifications = np.loadtxt("12-2-1520-classifications.txt", np.float32)                  # read in training classifications
+    npaClassifications = np.loadtxt("classifications.txt", np.float32)                  # read in training classifications
 except:
-    print("error, unable to open 12-2-1520-classifications.txt, exiting program\n")
+    print("error, unable to open classifications.txt, exiting program\n")
     os.system("pause")
     exit()
 
 try:
-    npaFlattenedImages = np.loadtxt("12-2-1520-flattened_images.txt", np.float32)                 # read in training images
+    npaFlattenedImages = np.loadtxt("flattened_images.txt", np.float32)                 # read in training images
 except:
-    print("error, unable to open 12-2-1520-flattened_images.txt, exiting program\n")
+    print("error, unable to open flattened_images.txt, exiting program\n")
     os.system("pause")
     exit()
 
