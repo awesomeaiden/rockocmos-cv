@@ -4,12 +4,12 @@ import cv2
 import os
 
 # module level variables ######################################################
-MIN_CONTOUR_AREA = 200
+MIN_CONTOUR_AREA = 70
 RESIZED_IMAGE_WIDTH = 20
 RESIZED_IMAGE_HEIGHT = 30
 ###############################################################################
 
-imgTrainingNumbers = cv2.imread("ocr_samples/uppercase4.jpg")            # read in training numbers image
+imgTrainingNumbers = cv2.imread("ocr_samples/all-simple-train.PNG")            # read in training numbers image
 
 imgGray = cv2.cvtColor(imgTrainingNumbers, cv2.COLOR_BGR2GRAY)    # get grayscale image
 imgBlurred = cv2.GaussianBlur(imgGray, (5,5), 0)                  # blur
@@ -96,7 +96,7 @@ npaClassifications = fltClassifications.reshape((fltClassifications.size, 1))   
 print("\ntraining complete")
 
 # write flattened images to file
-np.savetxt("classifications.txt", npaClassifications)
-np.savetxt("flattened_images.txt", npaFlattenedImages)
+np.savetxt("12-2-1520-classifications.txt", npaClassifications)
+np.savetxt("12-2-1520-flattened_images.txt", npaFlattenedImages)
 
 cv2.destroyAllWindows()             # remove windows from memory
