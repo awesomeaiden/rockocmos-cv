@@ -4,12 +4,12 @@ import cv2
 import os
 
 # module level variables ######################################################
-MIN_CONTOUR_AREA = 50
+MIN_CONTOUR_AREA = 200
 RESIZED_IMAGE_WIDTH = 20
 RESIZED_IMAGE_HEIGHT = 30
 ###############################################################################
 
-imgTrainingNumbers = cv2.imread("ocr_samples/all-small.png")            # read in training numbers image
+imgTrainingNumbers = cv2.imread("ocr_samples/uppercase4.jpg")            # read in training numbers image
 
 imgGray = cv2.cvtColor(imgTrainingNumbers, cv2.COLOR_BGR2GRAY)    # get grayscale image
 imgBlurred = cv2.GaussianBlur(imgGray, (5,5), 0)                  # blur
@@ -40,10 +40,8 @@ intClassifications = []         # declare empty classifications list, this will 
 
                                 # possible chars we are interested in are digits 0 through 9, put these in list intValidChars
 intValidChars = [ord('0'), ord('1'), ord('2'), ord('3'), ord('4'), ord('5'), ord('6'), ord('7'), ord('8'), ord('9'),
-                 192, 224, 193, 225, 194, 226, 195, 227, 196, 228, 197, 229, 168, 184, 198, 230, 199, 231, 200, 232,
-                 201, 233, 202, 234, 203, 235, 204, 236, 205, 237, 206, 238, 207, 239, 208, 240, 209, 241, 210, 242,
-                 211, 243, 212, 244, 213, 245, 214, 246, 215, 247, 216, 248, 217, 249, 249, 218, 250, 219, 251, 220,
-                 252, 221, 253, 222, 254, 223, 255]
+                 192, 193, 194, 195, 196, 197, 168, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
+                 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223]
 
 lastX = 0
 lastY = 0
@@ -77,7 +75,7 @@ for npaContour in npaContours:                          # for each contour
         cv2.imshow("training_numbers.png", imgTrainingNumbers)      # show training numbers image, this will now have red rectangles drawn on it
 
         intChar = cv2.waitKey(0)                     # get key press
-        print(intChar)
+        print(str(intChar) + ": " + chr(intChar))
 
         if intChar == 27:                   # if esc key was pressed
             sys.exit()                      # exit program
@@ -102,7 +100,3 @@ np.savetxt("classifications.txt", npaClassifications)
 np.savetxt("flattened_images.txt", npaFlattenedImages)
 
 cv2.destroyAllWindows()             # remove windows from memory
-
-# 192, 224, 193, 225, 194, 226 ,195, 227, 196, 228, 197, 229, 168, 184, 198, 230, 199, 231, 200, 232, 201, 233, \
-# 202, 234, 203, 235, 204, 236, 205, 237, 206, 238, 207, 239, 208, 240, 209, 241, 210, 242, 211, 243, 212, 244, \
-# 213, 245, 214, 246, 215, 247, 216, 248, 217, 249, 249, 218, 250, 219, 251, 220, 252, 221, 253, 222, 254, 223, 255
