@@ -5,10 +5,10 @@ import os
 from googletrans import Translator
 
 # module level variables ##########################################################################
-MIN_CONTOUR_AREA = 200
+MIN_CONTOUR_AREA = 50
 RESIZED_IMAGE_WIDTH = 20
 RESIZED_IMAGE_HEIGHT = 30
-IMAGE_NAME = "ocr_samples/uppercase4.jpg"
+IMAGE_NAME = "ocr_samples/othertext1.jpg"
 ###################################################################################################
 
 class ContourWithData():
