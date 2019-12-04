@@ -231,7 +231,7 @@ for word in words: # for each word
         retval, npaResults, neigh_resp, dists = kNearest.findNearest(npaROIResized, k = 1)     # call KNN function find_nearest
 
         cv2.imshow("imgTestingNumbers", imgTestingNumbers)  # show input image with green boxes drawn around found digits
-        # cv2.waitKey(0)  # wait for user key press to continue
+        cv2.waitKey(20)  # wait a small moment to watch the process
 
         # Print textual results
         npaResultInt = int(npaResults[0][0])
@@ -245,16 +245,8 @@ for word in words: # for each word
 # Remove last space
 strFinalString = strFinalString[:-1]
 
-# Show the full string
-print("\n" + strFinalString + "\n")
-
-# Convert to lowercase (other than first character)
+# Convert to lowercase (other than first character) and show
 lowercaseFinalString = strFinalString.lower().capitalize()
 print("\n" + lowercaseFinalString + "\n")
-
-# Sample translation
-# translator = Translator()
-# translation = translator.translate("Образец русских слов")
-# print(translation.text)
 
 cv2.destroyAllWindows()             # remove windows from memory
