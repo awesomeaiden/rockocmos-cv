@@ -9,7 +9,7 @@ RESIZED_IMAGE_WIDTH = 20
 RESIZED_IMAGE_HEIGHT = 30
 ###############################################################################
 
-imgTrainingNumbers = cv2.imread("ocr_samples/commas.png")            # read in training numbers image
+imgTrainingNumbers = cv2.imread("ocr_samples/commas2.png")            # read in training numbers image
 
 imgGray = cv2.cvtColor(imgTrainingNumbers, cv2.COLOR_BGR2GRAY)    # get grayscale image
 imgBlurred = cv2.GaussianBlur(imgGray, (5,5), 0)                  # blur

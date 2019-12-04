@@ -5,10 +5,10 @@ import os
 from googletrans import Translator
 
 # module level variables ##########################################################################
-MIN_CONTOUR_AREA = 30
+MIN_CONTOUR_AREA = 25
 RESIZED_IMAGE_WIDTH = 20
 RESIZED_IMAGE_HEIGHT = 30
-IMAGE_NAME = "ocr_samples/othertext3.PNG"
+IMAGE_NAME = "ocr_samples/othertext4.PNG"
 ###################################################################################################
 
 class ContourWithData():
@@ -35,6 +35,7 @@ class ContourWithData():
 
 # Custom characters dictionary
 russianChars = {
+    44: ",",
     192: "А",
     193: "Б",
     194: "В",
@@ -145,9 +146,10 @@ for contour in validContoursWithData:
         prevRectY = contour.intRectY
 
 # Now use max difference to differentiate lines
-lineDiffLimit = maxDiffY / 3
+lineDiffLimit = maxDiffY / 2.4
 contourLines = [[]]
 prevRectY = validContoursWithData[0].intRectY
+prevHeightY = validContoursWithData[0].intRectHeight
 first = True
 lineNum = 0
 for contour in validContoursWithData:
@@ -156,22 +158,60 @@ for contour in validContoursWithData:
         first = False
     else:
         diffY = contour.intRectY - prevRectY
-        if diffY > lineDiffLimit:
+        noOverlap = contour.intRectY > (prevRectY + prevHeightY)
+        # If difference is great enough AND there is no overlap between character vertical position
+        if diffY > lineDiffLimit and noOverlap:
             contourLines.append([])
             lineNum += 1
         contourLines[lineNum].append(contour)
         prevRectY = contour.intRectY
+        prevHeightY = contour.intRectHeight
 
 # Now sort each line by x position
 for contourLine in contourLines:
     contourLine.sort(key = operator.attrgetter("intRectX"))
 
 # Now extract individual words from each line (as a set of contours aka characters)
-# While
+# First find max difference between contours in a given line
+words = [[]]
+wordNum = 0
+for contourLine in contourLines:
+    prevRectX = contourLine[0].intRectX + contourLine[0].intRectWidth
+    maxDiffX = 0
+    first = True
+    for contour in contourLine:
+        if first:
+            first = False
+        else:
+            diffX = contour.intRectX - prevRectX
+            if diffX > maxDiffX:
+                maxDiffX = diffX
+            prevRectX = contour.intRectX + contour.intRectWidth
+
+    # Now have the max space between two contours in the current line
+    wordDiffLimit = maxDiffX / 2
+    prevRectX = contourLine[0].intRectX + contourLine[0].intRectWidth
+    first = True
+    for contour in contourLine:
+        if first:
+            words[wordNum].append(contour)
+            first = False
+        else:
+            diffX = contour.intRectX - prevRectX
+            if diffX > wordDiffLimit:
+                words.append([])
+                wordNum += 1
+            words[wordNum].append(contour)
+            prevRectX = contour.intRectX + contour.intRectWidth
+    words.append([])
+    wordNum += 1
+
+# Remove last empty word
+words.pop()
 
 strFinalString = "" # declare final string
-for contourLine in contourLines: # for each contour line
-    for contourWithData in contourLine: # for each contour in this line
+for word in words: # for each word
+    for contourWithData in word: # for each contour in this word
         # draw a green rect around the current char
         cv2.rectangle(imgTestingNumbers,                                        # draw rectangle on original testing image
                       (contourWithData.intRectX, contourWithData.intRectY),     # upper left corner
@@ -191,16 +231,26 @@ for contourLine in contourLines: # for each contour line
         retval, npaResults, neigh_resp, dists = kNearest.findNearest(npaROIResized, k = 1)     # call KNN function find_nearest
 
         cv2.imshow("imgTestingNumbers", imgTestingNumbers)  # show input image with green boxes drawn around found digits
-        cv2.waitKey(0)  # wait for user key press to continue
+        # cv2.waitKey(0)  # wait for user key press to continue
 
         # Print textual results
         npaResultInt = int(npaResults[0][0])
         strCurrentChar = russianChars[npaResultInt]
         print(str(npaResultInt) + ": " + strCurrentChar)
 
-        strFinalString = strFinalString + strCurrentChar # append current char to full string
+        strFinalString += strCurrentChar # append current char to full string
+    # Add space after word
+    strFinalString += " "
 
-print("\n" + strFinalString + "\n")  # show the full string
+# Remove last space
+strFinalString = strFinalString[:-1]
+
+# Show the full string
+print("\n" + strFinalString + "\n")
+
+# Convert to lowercase (other than first character)
+lowercaseFinalString = strFinalString.lower().capitalize()
+print("\n" + lowercaseFinalString + "\n")
 
 # Sample translation
 # translator = Translator()
