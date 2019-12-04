@@ -166,6 +166,9 @@ for contour in validContoursWithData:
 for contourLine in contourLines:
     contourLine.sort(key = operator.attrgetter("intRectX"))
 
+# Now extract individual words from each line (as a set of contours aka characters)
+# While
+
 strFinalString = "" # declare final string
 for contourLine in contourLines: # for each contour line
     for contourWithData in contourLine: # for each contour in this line

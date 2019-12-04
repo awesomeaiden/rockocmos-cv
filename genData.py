@@ -9,7 +9,7 @@ RESIZED_IMAGE_WIDTH = 20
 RESIZED_IMAGE_HEIGHT = 30
 ###############################################################################
 
-imgTrainingNumbers = cv2.imread("ocr_samples/all-simple-train.PNG")            # read in training numbers image
+imgTrainingNumbers = cv2.imread("ocr_samples/commas.png")            # read in training numbers image
 
 imgGray = cv2.cvtColor(imgTrainingNumbers, cv2.COLOR_BGR2GRAY)    # get grayscale image
 imgBlurred = cv2.GaussianBlur(imgGray, (5,5), 0)                  # blur
@@ -41,7 +41,7 @@ intClassifications = []         # declare empty classifications list, this will 
                                 # possible chars we are interested in are digits 0 through 9, put these in list intValidChars
 intValidChars = [ord('0'), ord('1'), ord('2'), ord('3'), ord('4'), ord('5'), ord('6'), ord('7'), ord('8'), ord('9'),
                  192, 193, 194, 195, 196, 197, 168, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
-                 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223]
+                 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 44]
 
 lastX = 0
 lastY = 0
@@ -96,7 +96,7 @@ npaClassifications = fltClassifications.reshape((fltClassifications.size, 1))   
 print("\ntraining complete")
 
 # write flattened images to file
-np.savetxt("12-2-1520-classifications.txt", npaClassifications)
-np.savetxt("12-2-1520-flattened_images.txt", npaFlattenedImages)
+np.savetxt("classifications.txt", npaClassifications)
+np.savetxt("flattened_images.txt", npaFlattenedImages)
 
 cv2.destroyAllWindows()             # remove windows from memory
